@@ -7,7 +7,10 @@ import { Board } from './board.entity';
 
 @Injectable()
 export class BoardsService {
-  constructor(@InjectRepository(BoardRepository) private boardRepository: BoardRepository) {}
+  constructor(
+    @InjectRepository(BoardRepository)
+    private boardRepository: BoardRepository,
+  ) {}
 
   async getAllBoards(): Promise<Board[]> {
     return this.boardRepository.find();
@@ -31,6 +34,8 @@ export class BoardsService {
   }
 
   async deleteBoard(id: number): Promise<void> {
+    // delete와 remove가 있는데 둘의 차이점은 delete는 실제로 데이터를 삭제하는 것이 아니라
+    // 데이터베이스에서 해당 데이터를 찾아서 삭제 표시를 해주는 것이고, remove는 실제로 데이터를 삭제하는 것이다.
     const result = await this.boardRepository.delete(id);
 
     if (result.affected === 0) {
