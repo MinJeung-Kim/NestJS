@@ -9,9 +9,15 @@ export class AuthCredentialsDto {
   @IsString()
   @MinLength(8)
   @MaxLength(20)
-  // 비밀번호 패턴 검사
-  @Matches(/(?:(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).*)/, {
-    message: 'password too weak',
+
+  // 영어 대문자, 소문자, 숫자, 특수문자 포함해야함
+  //   @Matches(/(?:(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).*)/, {
+  //     message: 'password too weak',
+  //   })
+
+  // 영어랑 숫자만 허용
+  @Matches(/^[a-zA-Z0-9]*$/, {
+    message: 'password only accepts english and number',
   })
   password: string;
 }
