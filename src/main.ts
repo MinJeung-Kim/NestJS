@@ -11,6 +11,6 @@ async function bootstrap() {
       transform: true, // 요청 데이터를 DTO 타입으로 자동 변환
     }),
   );
-  await app.listen(process.env.PORT ?? 8000);
+  await app.listen(8000);
 }
 bootstrap();
