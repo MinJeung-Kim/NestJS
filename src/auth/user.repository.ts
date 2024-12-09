@@ -1,5 +1,6 @@
 import { ConflictException, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
+import * as bcrypt from 'bcryptjs';
 import { User } from './user.entity';
 import { AuthCredentialsDto } from './dto/authcredential.dto';
 
@@ -12,7 +13,11 @@ export class UserRepository extends Repository<User> {
   async createUser(authCredentialsDto: AuthCredentialsDto): Promise<void> {
     const { username, password } = authCredentialsDto;
 
-    const user = this.create({ username, password });
+    // 똑같은 비밀번호를 설정 하더라도, salt에서 유니크한 값을 붙여서 해시를 만들어 낸다.
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const user = this.create({ username, password: hashedPassword });
 
     try {
       await this.save(user);
