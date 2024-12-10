@@ -13,8 +13,15 @@ export class BoardsService {
     private boardRepository: BoardRepository,
   ) {}
 
-  async getAllBoards(): Promise<Board[]> {
-    return this.boardRepository.find();
+  async getAllBoards(user: User): Promise<Board[]> {
+    const query = this.boardRepository.createQueryBuilder('board');
+
+    // 내 아이디로 작성한 게시글만 가져오기
+    query.where('board.userId = :userId', { userId: user.id });
+
+    // .getMany() : 조건에 맞는 전체 data를 가져옴
+    const boards = await query.getMany();
+    return boards;
   }
 
   async getBoardById(id: number): Promise<Board> {
