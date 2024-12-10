@@ -11,13 +11,13 @@ export class BoardRepository extends Repository<Board> {
     super(Board, dataSource.createEntityManager());
   }
 
-  async getBoardById(id: number): Promise<Board> {
+  async getBoardById(boardId: number): Promise<Board> {
     const found = await this.findOne({
-      where: { id: id },
+      where: { id: boardId },
     });
 
     if (!found) {
-      throw new NotFoundException(`Can't find Board with id ${id}`);
+      throw new NotFoundException(`Can't find Board with id ${boardId}`);
     }
     return found;
   }

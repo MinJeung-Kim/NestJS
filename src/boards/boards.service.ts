@@ -24,16 +24,16 @@ export class BoardsService {
     return boards;
   }
 
-  async getBoardById(id: number): Promise<Board> {
-    return this.boardRepository.getBoardById(id);
+  async getBoardById(boardId: number): Promise<Board> {
+    return this.boardRepository.getBoardById(boardId);
   }
 
   async createBoard(createBoardDto: CreateBoardDto, user: User): Promise<Board> {
     return this.boardRepository.createBoard(createBoardDto, user);
   }
 
-  async updateBoard(id: number, status: BoardStatus): Promise<Board> {
-    const board = await this.getBoardById(id);
+  async updateBoard(boardId: number, status: BoardStatus): Promise<Board> {
+    const board = await this.getBoardById(boardId);
 
     board.status = status;
     await this.boardRepository.save(board);
@@ -41,13 +41,13 @@ export class BoardsService {
     return board;
   }
 
-  async deleteBoard(id: number): Promise<void> {
+  async deleteBoard(boardId: number, user: User): Promise<void> {
     // delete와 remove가 있는데 둘의 차이점은 delete는 실제로 데이터를 삭제하는 것이 아니라
     // 데이터베이스에서 해당 데이터를 찾아서 삭제 표시를 해주는 것이고, remove는 실제로 데이터를 삭제하는 것이다.
-    const result = await this.boardRepository.delete(id);
+    const result = await this.boardRepository.delete({ id: boardId, user });
 
     if (result.affected === 0) {
-      throw new NotFoundException(`Can't find Board with id ${id}`);
+      throw new NotFoundException(`Can't find Board with id ${boardId}`);
     }
   }
 }
